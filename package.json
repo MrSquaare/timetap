@@ -16,16 +16,22 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
-    "@shopify/restyle": "^2.4.5",
     "expo": "~54.0.30",
     "expo-constants": "~18.0.12",
     "expo-linking": "~8.0.11",
     "expo-router": "~6.0.21",
+    "expo-sqlite": "~16.0.10",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-safe-area-context": "~5.6.2",
-    "react-native-screens": "~4.16.0"
+    "react-native-screens": "~4.16.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwind-variants": "^3.2.2",
+    "tailwindcss": "^4.1.18",
+    "uniwind": "^1.2.2",
+    "zod": "^4.2.1",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@types/react": "~19.1.17",

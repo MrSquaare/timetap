@@ -1,19 +1,25 @@
 import { Stack } from "expo-router";
-import { Box } from "../components/ui/Box";
-import { Text } from "../components/ui/Text";
+import { Text, View } from "react-native";
+
+import { ThemePicker } from "../components/settings/ThemePicker";
+import { useThemeStore } from "../stores/theme";
 
 export default function Settings() {
+  const { theme, setTheme } = useThemeStore();
+
   return (
-    <Box flex={1}>
-      <Stack.Screen options={{ title: "Settings" }} />
-      <Box
-        backgroundColor="mainBackground"
-        alignItems="center"
-        justifyContent="center"
-        flex={1}
-      >
-        <Text>Open up app/settings.tsx to customize this screen.</Text>
-      </Box>
-    </Box>
+    <View className={"flex-1 bg-background"}>
+      <Stack.Screen
+        options={{
+          title: "Settings",
+        }}
+      />
+      <View className={"flex-1 p-4"}>
+        <Text className={"mb-2 text-lg font-medium text-foreground"}>
+          Theme
+        </Text>
+        <ThemePicker onThemeChange={setTheme} selectedTheme={theme} />
+      </View>
+    </View>
   );
 }
