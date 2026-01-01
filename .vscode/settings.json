@@ -30,6 +30,7 @@
         "ListHeaderComponentClassName"
     ],
     "tailwindCSS.classFunctions": [
+        "tv",
         "useResolveClassNames"
     ]
 }
