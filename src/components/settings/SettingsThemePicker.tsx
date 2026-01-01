@@ -4,23 +4,23 @@ import { View } from "react-native";
 import { Theme } from "../../schemas/theme";
 import { Picker } from "../ui/Picker";
 
-type ThemeOption = {
+type SettingsThemeOption = {
   label: string;
   value: Theme;
 };
 
-const themeOptions: ThemeOption[] = [
+const settingsThemeOptions: SettingsThemeOption[] = [
   { label: "System", value: "system" },
   { label: "Light", value: "light" },
   { label: "Dark", value: "dark" },
 ];
 
-export type ThemePickerProps = {
+export type SettingsThemePickerProps = {
   selectedTheme: Theme;
   onThemeChange: (theme: Theme) => void;
 };
 
-export const ThemePicker: FC<ThemePickerProps> = ({
+export const SettingsThemePicker: FC<SettingsThemePickerProps> = ({
   selectedTheme,
   onThemeChange,
 }) => {
@@ -31,7 +31,7 @@ export const ThemePicker: FC<ThemePickerProps> = ({
         value={selectedTheme}
       >
         <Picker.List>
-          {themeOptions.map((option) => (
+          {settingsThemeOptions.map((option) => (
             <Picker.Item
               className={"flex-1"}
               key={option.value}

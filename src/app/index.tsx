@@ -1,17 +1,18 @@
 import { Link, Stack } from "expo-router";
 import { FC } from "react";
-import { Text, View } from "react-native";
-import { useCSSVariable } from "uniwind";
+import { View } from "react-native";
 
+import { Button } from "../components/ui/Button";
 import { Icon } from "../components/ui/Icon";
+import { Text } from "../components/ui/Text";
 
 const HomeHeaderActions: FC = () => {
-  const foreground = useCSSVariable("--color-foreground");
-
   return (
     <View>
       <Link asChild href={"settings"}>
-        <Icon color={String(foreground)} name={"settings-outline"} size={24} />
+        <Button accessibilityLabel={"Settings"} hitSlop={8} variant={"action"}>
+          <Icon name={"settings-outline"} size={24} />
+        </Button>
       </Link>
     </View>
   );
@@ -19,7 +20,7 @@ const HomeHeaderActions: FC = () => {
 
 export default function Home() {
   return (
-    <View className={"flex-1 bg-background"}>
+    <View className={"bg-background flex-1"}>
       <Stack.Screen
         options={{
           title: "Home",
@@ -27,9 +28,7 @@ export default function Home() {
         }}
       />
       <View className={"flex-1 items-center justify-center"}>
-        <Text className={"text-foreground"}>
-          Open up app/index.tsx to start working on your app!
-        </Text>
+        <Text>Open up app/index.tsx to start working on your app!</Text>
       </View>
     </View>
   );

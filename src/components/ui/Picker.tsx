@@ -36,9 +36,9 @@ const pickerStyles = tv({
   slots: {
     root: "flex",
     segment:
-      "relative overflow-hidden rounded-lg border border-border bg-surface p-1",
+      "border-border bg-surface relative overflow-hidden rounded-lg border p-1",
     list: "relative flex overflow-hidden",
-    item: "relative z-10 inline-flex items-center gap-x-2 rounded-lg bg-transparent px-4 py-3 text-sm font-medium text-muted transition-colors duration-150",
+    item: "text-muted relative z-10 inline-flex items-center gap-x-2 rounded-sm bg-transparent px-4 py-3 text-sm font-medium transition-colors duration-150",
     label: "text-sm font-medium",
   },
   variants: {
