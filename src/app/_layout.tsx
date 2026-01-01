@@ -6,10 +6,12 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useMemo } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { SafeAreaListener } from "react-native-safe-area-context";
-import { Uniwind, useCSSVariable } from "uniwind";
+import { Uniwind } from "uniwind";
 
+import { Header } from "../components/ui/Header";
+import { Text } from "../components/ui/Text";
 import { database, migrations } from "../lib/database";
 import { useThemeStore } from "../stores/theme";
 
@@ -49,14 +51,10 @@ function AppError({ error }: { error: Error }) {
 }
 
 function AppContent() {
-  const background = useCSSVariable("--color-background");
-  const foreground = useCSSVariable("--color-foreground");
-
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: String(background) },
-        headerTintColor: String(foreground),
+        header: (props) => <Header {...props} />,
       }}
     />
   );

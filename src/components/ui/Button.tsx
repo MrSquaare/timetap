@@ -7,7 +7,7 @@ import { Text } from "./Text";
 
 const buttonStyles = tv({
   slots: {
-    root: "flew-row items-center active:opacity-70",
+    root: "flex-row items-center active:opacity-70",
     text: "",
   },
   variants: {
