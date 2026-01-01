@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { View } from "react-native";
+import { SafeAreaListener } from "react-native-safe-area-context";
 import { Uniwind, useCSSVariable } from "uniwind";
 
 import { useThemeStore } from "../stores/theme";
@@ -18,14 +19,20 @@ export default function App() {
   }, [theme]);
 
   return (
-    <View className={"flex-1 bg-background"}>
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: String(background) },
-          headerTintColor: String(foreground),
-        }}
-      />
-      <StatusBar />
-    </View>
+    <SafeAreaListener
+      onChange={({ insets }) => {
+        Uniwind.updateInsets(insets);
+      }}
+    >
+      <View className={"bg-background p-safe flex-1"}>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: String(background) },
+            headerTintColor: String(foreground),
+          }}
+        />
+        <StatusBar />
+      </View>
+    </SafeAreaListener>
   );
 }
