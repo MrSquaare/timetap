@@ -18,5 +18,5 @@ export default defineConfig(
       "react/jsx-sort-props": ["error"],
     },
   },
-  { ignores: [".expo/", "dist/", "src/uniwind-types.d.ts"] },
+  { ignores: [".expo/", "dist/", "drizzle", "src/uniwind-types.d.ts"] },
 );

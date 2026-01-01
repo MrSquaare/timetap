@@ -1,38 +1,97 @@
 import "../global.css";
 
-import { Stack } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { useFonts } from "expo-font";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import { View } from "react-native";
+import { useEffect, useMemo } from "react";
+import { Text, View } from "react-native";
 import { SafeAreaListener } from "react-native-safe-area-context";
 import { Uniwind, useCSSVariable } from "uniwind";
 
+import { database, migrations } from "../lib/database";
 import { useThemeStore } from "../stores/theme";
 
-export default function App() {
-  const { theme } = useThemeStore();
+SplashScreen.preventAutoHideAsync();
+
+const useLoader = () => {
+  const migrationResult = useMigrations(database, migrations);
+  const fontResult = useFonts(Ionicons.font);
+
+  const loaded = useMemo(() => {
+    const migrationLoaded = migrationResult.success || !!migrationResult.error;
+    const fontLoaded = fontResult[0];
+
+    return migrationLoaded && fontLoaded;
+  }, [migrationResult, fontResult]);
+
+  const error = useMemo(() => {
+    const migrationError = migrationResult.error
+      ? new Error(`Migration Error: ${migrationResult.error.message}`)
+      : null;
+    const fontError = fontResult[1]
+      ? new Error(`Font Error: ${fontResult[1].message}`)
+      : null;
+
+    return migrationError || fontError;
+  }, [migrationResult, fontResult]);
+
+  return { loaded, error };
+};
+
+function AppError({ error }: { error: Error }) {
+  return (
+    <View className={"bg-background flex-1 items-center justify-center p-4"}>
+      <Text className={"text-red-500"}>{error.message}</Text>
+    </View>
+  );
+}
+
+function AppContent() {
   const background = useCSSVariable("--color-background");
   const foreground = useCSSVariable("--color-foreground");
+
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: String(background) },
+        headerTintColor: String(foreground),
+      }}
+    />
+  );
+}
+
+export default function App() {
+  const { loaded, error } = useLoader();
+  const { theme } = useThemeStore();
+
+  useEffect(() => {
+    if (loaded) {
+      if (error) {
+        console.error("App loading error:", error);
+      }
+
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
 
   useEffect(() => {
     Uniwind.setTheme(theme);
   }, [theme]);
 
   return (
-    <SafeAreaListener
-      onChange={({ insets }) => {
-        Uniwind.updateInsets(insets);
-      }}
-    >
-      <View className={"bg-background p-safe flex-1"}>
-        <Stack
-          screenOptions={{
-            headerStyle: { backgroundColor: String(background) },
-            headerTintColor: String(foreground),
-          }}
-        />
-        <StatusBar />
-      </View>
-    </SafeAreaListener>
+    <>
+      <StatusBar />
+      <SafeAreaListener
+        onChange={({ insets }) => {
+          Uniwind.updateInsets(insets);
+        }}
+      >
+        <View className={"bg-background p-safe flex-1"}>
+          {error ? <AppError error={error} /> : loaded ? <AppContent /> : null}
+        </View>
+      </SafeAreaListener>
+    </>
   );
 }
