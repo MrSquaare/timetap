@@ -32,5 +32,6 @@
     "tailwindCSS.classFunctions": [
         "tv",
         "useResolveClassNames"
-    ]
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
