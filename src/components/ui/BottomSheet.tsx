@@ -4,6 +4,8 @@ import { View, ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { withUniwind } from "uniwind";
 
+import { KeyboardAvoidingView } from "../utilities/KeyboardAvoidingView";
+
 const bottomSheetStyles = tv({
   slots: {
     backdrop: "bg-foreground/50",
@@ -39,16 +41,18 @@ export const BottomSheet: FC<BottomSheetProps> = ({
   const styles = bottomSheetStyles();
 
   return (
-    <RootComponent
-      {...props}
-      animateOnMount={true}
-      backgroundClassName={styles.background({ className })}
-      enablePanDownToClose={true}
-      handleIndicatorClassName={styles.indicator({
-        className: handleIndicatorClassName,
-      })}
-      index={0}
-    />
+    <KeyboardAvoidingView style={{ flex: 1 }}>
+      <RootComponent
+        {...props}
+        animateOnMount={true}
+        backgroundClassName={styles.background({ className })}
+        enablePanDownToClose={true}
+        handleIndicatorClassName={styles.indicator({
+          className: handleIndicatorClassName,
+        })}
+        index={0}
+      />
+    </KeyboardAvoidingView>
   );
 };
 
