@@ -7,6 +7,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useMemo } from "react";
 import { View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaListener } from "react-native-safe-area-context";
 import { Uniwind } from "uniwind";
 
@@ -86,9 +87,15 @@ export default function App() {
           Uniwind.updateInsets(insets);
         }}
       >
-        <View className={"bg-background p-safe flex-1"}>
-          {error ? <AppError error={error} /> : loaded ? <AppContent /> : null}
-        </View>
+        <GestureHandlerRootView>
+          <View className={"bg-background p-safe flex-1"}>
+            {error ? (
+              <AppError error={error} />
+            ) : loaded ? (
+              <AppContent />
+            ) : null}
+          </View>
+        </GestureHandlerRootView>
       </SafeAreaListener>
     </>
   );
