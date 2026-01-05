@@ -1,19 +1,22 @@
 import "../global.css";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useMemo } from "react";
+import { PropsWithChildren, useEffect, useMemo } from "react";
 import { View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaListener } from "react-native-safe-area-context";
 import { Uniwind } from "uniwind";
 
 import { Header } from "../components/ui/Header";
 import { Text } from "../components/ui/Text";
 import { database, migrations } from "../lib/database";
+import { queryClient } from "../lib/query";
 import { useThemeStore } from "../stores/theme";
 
 SplashScreen.preventAutoHideAsync();
@@ -43,6 +46,52 @@ const useLoader = () => {
   return { loaded, error };
 };
 
+function AppWrapper({ children }: PropsWithChildren) {
+  const { theme } = useThemeStore();
+
+  useEffect(() => {
+    Uniwind.setTheme(theme);
+  }, [theme]);
+
+  return (
+    <SafeAreaListener
+      onChange={({ insets }) => {
+        Uniwind.updateInsets(insets);
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <KeyboardProvider>
+          <GestureHandlerRootView>{children}</GestureHandlerRootView>
+        </KeyboardProvider>
+      </QueryClientProvider>
+    </SafeAreaListener>
+  );
+}
+
+function AppLoader() {
+  const { loaded, error } = useLoader();
+
+  useEffect(() => {
+    if (loaded) {
+      if (error) {
+        console.error("App loading error:", error);
+      }
+
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (error) {
+    return <AppError error={error} />;
+  }
+
+  if (loaded) {
+    return <AppContent />;
+  }
+
+  return null;
+}
+
 function AppError({ error }: { error: Error }) {
   return (
     <View className={"bg-background flex-1 items-center justify-center p-4"}>
@@ -62,41 +111,14 @@ function AppContent() {
 }
 
 export default function App() {
-  const { loaded, error } = useLoader();
-  const { theme } = useThemeStore();
-
-  useEffect(() => {
-    if (loaded) {
-      if (error) {
-        console.error("App loading error:", error);
-      }
-
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
-
-  useEffect(() => {
-    Uniwind.setTheme(theme);
-  }, [theme]);
-
   return (
     <>
       <StatusBar />
-      <SafeAreaListener
-        onChange={({ insets }) => {
-          Uniwind.updateInsets(insets);
-        }}
-      >
-        <GestureHandlerRootView>
-          <View className={"bg-background p-safe flex-1"}>
-            {error ? (
-              <AppError error={error} />
-            ) : loaded ? (
-              <AppContent />
-            ) : null}
-          </View>
-        </GestureHandlerRootView>
-      </SafeAreaListener>
+      <AppWrapper>
+        <View className={"bg-background p-safe flex-1"}>
+          <AppLoader />
+        </View>
+      </AppWrapper>
     </>
   );
 }
