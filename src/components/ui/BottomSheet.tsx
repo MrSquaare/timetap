@@ -8,7 +8,7 @@ import { KeyboardAvoidingView } from "../utilities/KeyboardAvoidingView";
 
 const bottomSheetStyles = tv({
   slots: {
-    backdrop: "bg-foreground/50",
+    backdrop: "bg-foreground/33",
     background: "bg-background",
     indicator: "bg-foreground/50",
   },

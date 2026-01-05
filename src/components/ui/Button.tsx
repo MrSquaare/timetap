@@ -1,6 +1,6 @@
 import { Children, FC, cloneElement, isValidElement } from "react";
 import { Pressable, PressableProps } from "react-native";
-import { tv, VariantProps } from "tailwind-variants";
+import { cn, tv, VariantProps } from "tailwind-variants";
 
 import { Icon } from "./Icon";
 import { Text } from "./Text";
@@ -18,38 +18,78 @@ const buttonStyles = tv({
       },
       action: {},
     },
+    size: {
+      sm: {
+        text: "text-sm",
+      },
+      md: {},
+      lg: {
+        text: "text-lg",
+      },
+    },
+    disabled: {
+      true: {
+        root: "opacity-50",
+      },
+      false: {},
+    },
   },
+  compoundVariants: [
+    {
+      variant: "filled",
+      size: "sm",
+      class: {
+        root: "rounded-md px-2.5 py-1.5",
+      },
+    },
+    {
+      variant: "filled",
+      size: "md",
+      class: {
+        root: "rounded-lg px-4 py-2",
+      },
+    },
+    {
+      variant: "filled",
+      size: "lg",
+      class: {
+        root: "rounded-xl px-6 py-3",
+      },
+    },
+  ],
   defaultVariants: {
     variant: "filled",
+    size: "md",
   },
 });
 
 export type ButtonProps = PressableProps &
   VariantProps<typeof buttonStyles> & {
-    styleChildren?: boolean;
+    customizeChildren?: boolean;
+    childrenClassName?: string;
   };
 
 export const Button: FC<ButtonProps> = ({
-  className,
   children,
   variant,
-  styleChildren = true,
+  size,
+  disabled,
+  className,
+  customizeChildren = true,
+  childrenClassName,
   ...props
 }) => {
-  const styles = buttonStyles({ variant });
+  const styles = buttonStyles({ variant, size, disabled });
+
   const processedChildren =
-    !styleChildren || typeof children === "function"
+    !customizeChildren || typeof children === "function"
       ? children
       : Children.map(children, (child) => {
-          if (["number", "boolean", "string"].includes(typeof child)) {
-            return <Text className={styles.text()}>{child}</Text>;
-          }
-
           if (isValidElement<{ className?: string }>(child)) {
             if (child.type === Text || child.type === Icon) {
               return cloneElement(child, {
                 className: styles.text({
-                  className: child.props.className,
+                  className: cn(childrenClassName, child.props.className),
                 }),
               });
             }
@@ -63,6 +103,7 @@ export const Button: FC<ButtonProps> = ({
       accessibilityRole={"button"}
       {...props}
       className={styles.root({ className })}
+      disabled={disabled}
     >
       {processedChildren}
     </Pressable>

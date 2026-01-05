@@ -4,11 +4,26 @@ import { tv } from "tailwind-variants";
 import { Button, ButtonProps } from "./Button";
 
 const fabStyles = tv({
-  base: "absolute right-8 bottom-8 rounded-full p-4 shadow-lg",
+  slots: {
+    root: "absolute right-8 bottom-8 rounded-full p-4 shadow-lg",
+    text: "text-md",
+  },
 });
 
 export type FABProps = ButtonProps;
 
-export const FAB: FC<FABProps> = ({ className, ...props }) => {
-  return <Button {...props} className={fabStyles({ className })} />;
+export const FAB: FC<FABProps> = ({
+  className,
+  childrenClassName,
+  ...props
+}) => {
+  const styles = fabStyles();
+
+  return (
+    <Button
+      {...props}
+      childrenClassName={styles.text({ className: childrenClassName })}
+      className={styles.root({ className })}
+    />
+  );
 };
