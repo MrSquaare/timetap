@@ -1,16 +1,23 @@
 import * as BS from "@gorhom/bottom-sheet";
-import { ComponentProps, FC } from "react";
+import { ComponentProps, FC, ReactNode } from "react";
 import { View, ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { withUniwind } from "uniwind";
 
 import { KeyboardAvoidingView } from "../utilities/KeyboardAvoidingView";
 
+import { Button, ButtonProps } from "./Button";
+import { Text, TextProps } from "./Text";
+
 const bottomSheetStyles = tv({
   slots: {
     backdrop: "bg-foreground/33",
     background: "bg-background",
     indicator: "bg-foreground/50",
+    header: "border-border flex-row items-center border-b px-4 pb-4",
+    title: "text-lg font-semibold",
+    actionText: "font-medium",
+    body: "p-4",
   },
 });
 
@@ -119,4 +126,70 @@ export const BottomSheetHandle: FC<BottomSheetHandleProps> = ({
       })}
     />
   );
+};
+
+export type BottomSheetHeaderProps = ViewProps & {
+  left?: ReactNode;
+  right?: ReactNode;
+};
+
+export const BottomSheetHeader: FC<BottomSheetHeaderProps> = ({
+  left,
+  right,
+  children,
+  className,
+  ...props
+}) => {
+  const styles = bottomSheetStyles();
+
+  return (
+    <View {...props} className={styles.header({ className })}>
+      <View className={"flex-1 items-start"}>{left}</View>
+      <View className={"flex-4 items-center"}>{children}</View>
+      <View className={"flex-1 items-end"}>{right}</View>
+    </View>
+  );
+};
+
+export type BottomSheetTitleProps = TextProps;
+
+export const BottomSheetTitle: FC<BottomSheetTitleProps> = ({
+  className,
+  ...props
+}) => {
+  const styles = bottomSheetStyles();
+
+  return <Text {...props} className={styles.title({ className })} />;
+};
+
+export type BottomSheetActionProps = Omit<ButtonProps, "children"> &
+  Pick<TextProps, "children"> & {
+    textClassName?: string;
+  };
+
+export const BottomSheetAction: FC<BottomSheetActionProps> = ({
+  children,
+  textClassName,
+  ...props
+}) => {
+  const styles = bottomSheetStyles();
+
+  return (
+    <Button variant={"action"} {...props}>
+      <Text className={styles.actionText({ className: textClassName })}>
+        {children}
+      </Text>
+    </Button>
+  );
+};
+
+export type BottomSheetBodyProps = ViewProps;
+
+export const BottomSheetBody: FC<BottomSheetBodyProps> = ({
+  className,
+  ...props
+}) => {
+  const styles = bottomSheetStyles();
+
+  return <View {...props} className={styles.body({ className })} />;
 };
