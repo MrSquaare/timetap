@@ -1,4 +1,3 @@
-import { useMutation } from "@tanstack/react-query";
 import { Stack, useRouter } from "expo-router";
 import { useRef } from "react";
 
@@ -16,16 +15,13 @@ import {
   BottomSheetTitle,
   BottomSheetView,
 } from "../../components/ui/BottomSheet";
-import { queryClient } from "../../lib/query";
-import { createCategory } from "../../services/category";
+import { useCreateCategoryMutation } from "../../lib/queries/category";
 
 export default function CategoriesCreate() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
-  const mutation = useMutation({
-    mutationFn: createCategory,
+  const mutation = useCreateCategoryMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
       router.back();
     },
   });

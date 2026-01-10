@@ -1,8 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
-import { useQuery } from "@tanstack/react-query";
 import { Link, Stack } from "expo-router";
 import { FC } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { CategoryCard } from "../components/categories/Card";
 import { Button } from "../components/ui/Button";
@@ -11,7 +10,7 @@ import { FAB } from "../components/ui/FAB";
 import { Icon } from "../components/ui/Icon";
 import { Spinner } from "../components/ui/Spinner";
 import { Text } from "../components/ui/Text";
-import { getCategories } from "../services/category";
+import { useCategoriesQuery } from "../lib/queries/category";
 
 const HomeHeaderActions: FC = () => {
   return (
@@ -26,10 +25,7 @@ const HomeHeaderActions: FC = () => {
 };
 
 export default function Home() {
-  const query = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
+  const query = useCategoriesQuery();
 
   return (
     <View className={"bg-background flex-1"}>
@@ -56,7 +52,13 @@ export default function Home() {
           ItemSeparatorComponent={() => <View className={"h-2"} />}
           contentContainerClassName={"p-4"}
           data={query.data}
-          renderItem={({ item, index }) => <CategoryCard category={item} />}
+          renderItem={({ item }) => (
+            <Link asChild href={`/categories/${item.id}`}>
+              <Pressable>
+                <CategoryCard category={item} />
+              </Pressable>
+            </Link>
+          )}
         />
       ) : (
         <Center>
