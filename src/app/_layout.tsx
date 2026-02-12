@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { PropsWithChildren, useEffect, useMemo } from "react";
 import { View } from "react-native";
@@ -13,10 +13,10 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaListener } from "react-native-safe-area-context";
 import { Uniwind } from "uniwind";
 
-import { Header } from "../components/ui/Header";
 import { Text } from "../components/ui/Text";
 import { database, migrations } from "../lib/database";
 import { queryClient } from "../lib/query";
+import { AppStack } from "../stack";
 import { useThemeStore } from "../stores/theme";
 
 SplashScreen.preventAutoHideAsync();
@@ -101,13 +101,7 @@ function AppError({ error }: { error: Error }) {
 }
 
 function AppContent() {
-  return (
-    <Stack
-      screenOptions={{
-        header: (props) => <Header {...props} />,
-      }}
-    />
-  );
+  return <AppStack />;
 }
 
 export default function App() {
