@@ -11,12 +11,14 @@
     "lint": "expo lint .",
     "lint:fix": "expo lint . --fix",
     "clean": "del-cli .expo/ dist/",
+    "db:generate": "drizzle-kit generate",
     "deps:update": "taze",
     "deps:upgrade": "taze -w"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@gorhom/bottom-sheet": "^5.2.8",
+    "@react-native-community/datetimepicker": "8.4.4",
     "@shopify/flash-list": "2.0.2",
     "@tanstack/react-form": "^1.28.0",
     "@tanstack/react-query": "^5.90.21",
