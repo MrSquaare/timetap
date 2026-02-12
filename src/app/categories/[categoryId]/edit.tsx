@@ -28,9 +28,9 @@ import {
 export default function CategoriesCreate() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const categoryId = Number(id);
-  const query = useCategoryByIdQuery(categoryId);
+  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
+  const id = Number(categoryId);
+  const query = useCategoryByIdQuery(id);
   const mutation = useUpdateCategoryMutation({
     onSuccess: () => {
       router.back();
@@ -42,7 +42,7 @@ export default function CategoriesCreate() {
       name: query.data?.name ?? "",
     },
     onSubmit: ({ value }) => {
-      mutation.mutate({ id: categoryId, name: value.name });
+      mutation.mutate({ id: id, name: value.name });
     },
   });
 
