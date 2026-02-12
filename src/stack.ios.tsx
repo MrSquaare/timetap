@@ -26,6 +26,22 @@ export const AppStack = () => {
           animation: "none",
         }}
       />
+      <Stack.Screen
+        name={"categories/[categoryId]/events/create"}
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "none",
+        }}
+      />
+      <Stack.Screen
+        name={"categories/[categoryId]/events/[eventId]/edit"}
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "none",
+        }}
+      />
     </Stack>
   );
 };

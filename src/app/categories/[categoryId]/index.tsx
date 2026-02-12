@@ -1,25 +1,29 @@
-import {
-  Link,
-  Redirect,
-  Stack,
-  useLocalSearchParams,
-  useRouter,
-} from "expo-router";
+import { FlashList } from "@shopify/flash-list";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { FC } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 
+import { EventCard } from "../../../components/events/Card";
 import { Button } from "../../../components/ui/Button";
 import { Center } from "../../../components/ui/Center";
+import { FAB } from "../../../components/ui/FAB";
 import { Icon } from "../../../components/ui/Icon";
 import { Spinner } from "../../../components/ui/Spinner";
 import { Text } from "../../../components/ui/Text";
 import { useCategoryByIdQuery } from "../../../lib/queries/category";
+import { useEventsByCategoryIdQuery } from "../../../lib/queries/event";
 
-const CategoriesDetailsHeaderActions: FC<{ id: string }> = ({ id }) => {
+const CategoriesDetailsHeaderActions: FC<{ categoryId: string }> = ({
+  categoryId,
+}) => {
   return (
-    <View>
-      <Link asChild href={`/categories/${id}/edit`}>
-        <Button accessibilityLabel={"Settings"} hitSlop={8} variant={"action"}>
+    <View className={"flex-row gap-2"}>
+      <Link asChild href={`/categories/${categoryId}/edit`}>
+        <Button
+          accessibilityLabel={"Edit Category"}
+          hitSlop={8}
+          variant={"action"}
+        >
           <Icon name={"pencil-outline"} size={24} />
         </Button>
       </Link>
@@ -28,71 +32,83 @@ const CategoriesDetailsHeaderActions: FC<{ id: string }> = ({ id }) => {
 };
 
 export default function CategoriesDetails() {
-  const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const categoryId = Number(id);
-  const query = useCategoryByIdQuery(categoryId);
+  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
+  const id = Number(categoryId);
+  const categoryQuery = useCategoryByIdQuery(id);
+  const eventsQuery = useEventsByCategoryIdQuery(id);
 
-  if (query.isLoading) {
+  if (categoryQuery.isLoading) {
     return (
-      <View className={"bg-foreground/33 flex-1"}>
-        <Stack.Screen
-          options={{
-            headerShown: false,
-            presentation: "transparentModal",
-            animation: "none",
-          }}
-        />
-        <Center>
-          <Spinner size={64} />
-        </Center>
-      </View>
+      <Center>
+        <Spinner size={64} />
+      </Center>
     );
   }
 
-  if (query.isError) {
+  if (categoryQuery.isError || !categoryQuery.data) {
     return (
-      <View className={"bg-foreground/33 flex-1"}>
-        <Stack.Screen
-          options={{
-            headerShown: false,
-            presentation: "transparentModal",
-            animation: "none",
-          }}
-        />
-        <Center>
-          <Text className={"mb-2 text-lg"}>Error loading category.</Text>
-          <View className={"flex-row gap-2"}>
-            <Button onPress={() => router.back()} size={"lg"}>
-              <Text>Back</Text>
-            </Button>
-            <Button onPress={() => query.refetch()} size={"lg"}>
-              <Text>Retry</Text>
-            </Button>
-          </View>
-        </Center>
-      </View>
+      <Center>
+        <Text>Error loading category.</Text>
+      </Center>
     );
-  }
-
-  if (!query.data) {
-    return <Redirect href={"/"} />;
   }
 
   return (
     <View className={"bg-background flex-1"}>
       <Stack.Screen
         options={{
-          headerShown: true,
-          title: query.data.name,
-          headerRight: () => <CategoriesDetailsHeaderActions id={id} />,
+          title: categoryQuery.data.name,
+          headerRight: () => (
+            <CategoriesDetailsHeaderActions categoryId={categoryId} />
+          ),
         }}
       />
-      <View className={"flex-1 p-4"}>
+
+      {eventsQuery.isLoading ? (
         <Center>
-          <Text>No event found.</Text>
+          <Spinner size={64} />
         </Center>
-      </View>
+      ) : eventsQuery.isError ? (
+        <Center>
+          <Text className={"mb-2 text-lg"}>Error loading events.</Text>
+          <Button onPress={() => eventsQuery.refetch()} size={"lg"}>
+            <Text>Retry</Text>
+          </Button>
+        </Center>
+      ) : eventsQuery.data?.length ? (
+        <FlashList
+          ItemSeparatorComponent={() => <View className={"h-2"} />}
+          contentContainerClassName={"p-4"}
+          data={eventsQuery.data}
+          renderItem={({ item }) => (
+            <Link
+              asChild
+              href={`/categories/${categoryId}/events/${item.id}/edit`}
+            >
+              <Pressable>
+                <EventCard event={item} />
+              </Pressable>
+            </Link>
+          )}
+        />
+      ) : (
+        <Center>
+          <Text className={"mb-2 text-lg"}>No event found.</Text>
+          <Link asChild href={`/categories/${categoryId}/events/create`}>
+            <Button size={"lg"}>
+              <Text>Create one!</Text>
+            </Button>
+          </Link>
+        </Center>
+      )}
+
+      {eventsQuery.data?.length ? (
+        <Link asChild href={`/categories/${categoryId}/events/create`}>
+          <FAB accessibilityLabel={"Add Event"}>
+            <Icon name={"add"} size={24} />
+          </FAB>
+        </Link>
+      ) : null}
     </View>
   );
 }
