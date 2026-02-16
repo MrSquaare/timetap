@@ -3,7 +3,7 @@ import { tv, VariantProps } from "tailwind-variants";
 
 const textAreaStyles = tv({
   slots: {
-    root: "text-foreground border-border focus:border-foreground min-h-25 w-full rounded-lg border px-4 py-2.5 text-sm",
+    root: "text-foreground border-border focus:border-foreground w-full rounded-lg border px-4 py-2.5 text-sm",
     cursor: "accent-foreground",
     placeholder: "accent-muted",
     selection: "accent-foreground/25",

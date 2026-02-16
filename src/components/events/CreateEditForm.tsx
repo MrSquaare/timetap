@@ -98,6 +98,7 @@ export const EventsCreateEditForm = withForm({
             <Field.Root errors={field.state.meta.errors}>
               <Field.Label>Description (Optional)</Field.Label>
               <TextArea
+                className={"h-25"}
                 disabled={isPending}
                 onChangeText={field.handleChange}
                 placeholder={"My description"}
