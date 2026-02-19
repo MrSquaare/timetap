@@ -13,6 +13,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaListener } from "react-native-safe-area-context";
 import { Uniwind } from "uniwind";
 
+import { PortalHost } from "../components/ui/Portal";
 import { Text } from "../components/ui/Text";
 import { database, migrations } from "../lib/database";
 import { queryClient } from "../lib/query";
@@ -112,6 +113,7 @@ export default function App() {
         <View className={"bg-background p-safe flex-1"}>
           <AppLoader />
         </View>
+        <PortalHost />
       </AppWrapper>
     </>
   );
