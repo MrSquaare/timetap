@@ -27,6 +27,14 @@ export const AppStack = () => {
         }}
       />
       <Stack.Screen
+        name={"categories/[categoryId]/delete"}
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "none",
+        }}
+      />
+      <Stack.Screen
         name={"categories/[categoryId]/events/create"}
         options={{
           headerShown: false,

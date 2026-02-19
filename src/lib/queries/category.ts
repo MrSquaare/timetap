@@ -8,11 +8,14 @@ import {
 import { Category } from "../../schemas/category";
 import {
   createCategory,
+  deleteCategory,
   getCategories,
   getCategoryById,
   updateCategory,
 } from "../../services/category";
 import { queryClient } from "../query";
+
+import { eventKeys } from "./event";
 
 export const categoryKeys = {
   all: ["categories"] as const,
@@ -103,6 +106,31 @@ export const useUpdateCategoryMutation = (
     onSuccess: (...args) => {
       options?.onSuccess?.(...args);
       updateCategoryMutationOptions.onSuccess?.(...args);
+    },
+  });
+};
+
+const deleteCategoryMutationOptions = mutationOptions({
+  mutationFn: deleteCategory,
+  onSuccess: (_, { id }) => {
+    queryClient.invalidateQueries({ queryKey: categoryKeys.list() });
+    queryClient.invalidateQueries({ queryKey: categoryKeys.detail(id) });
+    queryClient.invalidateQueries({ queryKey: eventKeys.list(id) });
+  },
+});
+
+export const useDeleteCategoryMutation = (
+  options?: Omit<
+    typeof deleteCategoryMutationOptions,
+    "mutationKey" | "mutationFn"
+  >,
+) => {
+  return useMutation({
+    ...options,
+    ...deleteCategoryMutationOptions,
+    onSuccess: (...args) => {
+      options?.onSuccess?.(...args);
+      deleteCategoryMutationOptions.onSuccess?.(...args);
     },
   });
 };

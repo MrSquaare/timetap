@@ -13,9 +13,9 @@ import { Text } from "../../../components/ui/Text";
 import { useCategoryByIdQuery } from "../../../lib/queries/category";
 import { useEventsByCategoryIdQuery } from "../../../lib/queries/event";
 
-const CategoriesDetailsHeaderActions: FC<{ categoryId: string }> = ({
-  categoryId,
-}) => {
+const CategoriesDetailsHeaderActions: FC<{
+  categoryId: string;
+}> = ({ categoryId }) => {
   return (
     <View className={"flex-row gap-2"}>
       <Link asChild href={`/categories/${categoryId}/edit`}>
@@ -25,6 +25,15 @@ const CategoriesDetailsHeaderActions: FC<{ categoryId: string }> = ({
           variant={"action"}
         >
           <Icon name={"pencil-outline"} size={24} />
+        </Button>
+      </Link>
+      <Link asChild href={`/categories/${categoryId}/delete`}>
+        <Button
+          accessibilityLabel={"Delete Category"}
+          hitSlop={8}
+          variant={"action"}
+        >
+          <Icon name={"trash-outline"} size={24} />
         </Button>
       </Link>
     </View>
