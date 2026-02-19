@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm";
 import { database } from "../lib/database";
 import { Category } from "../schemas/category";
 import { categories } from "../tables/categories";
-import { events } from "../tables/events";
 
 export const getCategories = async () => {
   return await database.select().from(categories).orderBy(categories.name);
@@ -52,8 +51,6 @@ export const updateCategory = async (payload: UpdateCategoryPayload) => {
 export type DeleteCategoryPayload = Pick<Category, "id">;
 
 export const deleteCategory = async (payload: DeleteCategoryPayload) => {
-  await database.delete(events).where(eq(events.categoryId, payload.id));
-
   const [category] = await database
     .delete(categories)
     .where(eq(categories.id, payload.id))
