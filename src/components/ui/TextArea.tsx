@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { TextInput, TextInputProps } from "react-native";
 import { tv, VariantProps } from "tailwind-variants";
 
@@ -31,7 +32,7 @@ const textAreaStyles = tv({
 export type TextAreaProps = TextInputProps &
   VariantProps<typeof textAreaStyles>;
 
-export const TextArea: React.FC<TextAreaProps> = ({
+export const TextArea: FC<TextAreaProps> = ({
   error,
   disabled,
   className,

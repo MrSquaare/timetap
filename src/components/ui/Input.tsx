@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { TextInput, TextInputProps } from "react-native";
 import { tv, VariantProps } from "tailwind-variants";
 
@@ -30,7 +31,7 @@ const inputStyles = tv({
 
 export type InputProps = TextInputProps & VariantProps<typeof inputStyles>;
 
-export const Input: React.FC<InputProps> = ({
+export const Input: FC<InputProps> = ({
   error,
   disabled,
   className,
