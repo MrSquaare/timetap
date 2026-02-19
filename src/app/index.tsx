@@ -1,6 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import { Link, Stack } from "expo-router";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Pressable, View } from "react-native";
 
 import { CategoryCard } from "../components/categories/Card";
@@ -10,7 +10,9 @@ import { FAB } from "../components/ui/FAB";
 import { Icon } from "../components/ui/Icon";
 import { Spinner } from "../components/ui/Spinner";
 import { Text } from "../components/ui/Text";
+import { Toast } from "../components/ui/Toast";
 import { useCategoriesQuery } from "../lib/queries/category";
+import { useCreateEventMutation } from "../lib/queries/event";
 
 const HomeHeaderActions: FC = () => {
   return (
@@ -26,6 +28,29 @@ const HomeHeaderActions: FC = () => {
 
 export default function Home() {
   const query = useCategoriesQuery();
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastOpen, setToastOpen] = useState(false);
+  const createEventMutation = useCreateEventMutation();
+
+  const handleQuickAdd = (categoryId: number, categoryName: string) => {
+    createEventMutation.mutate(
+      {
+        categoryId,
+        datetime: new Date(),
+        description: "",
+      },
+      {
+        onSuccess: () => {
+          setToastMessage(`Event quick added to ${categoryName}`);
+          setToastOpen(true);
+        },
+        onError: () => {
+          setToastMessage("Unable to quick add event");
+          setToastOpen(true);
+        },
+      },
+    );
+  };
 
   return (
     <View className={"bg-background flex-1"}>
@@ -55,7 +80,11 @@ export default function Home() {
           renderItem={({ item }) => (
             <Link asChild href={`/categories/${item.id}`}>
               <Pressable>
-                <CategoryCard category={item} />
+                <CategoryCard
+                  category={item}
+                  onQuickAdd={() => handleQuickAdd(item.id, item.name)}
+                  quickAddDisabled={createEventMutation.isPending}
+                />
               </Pressable>
             </Link>
           )}
@@ -77,6 +106,12 @@ export default function Home() {
           </FAB>
         </Link>
       ) : null}
+
+      <Toast
+        message={toastMessage}
+        onOpenChange={setToastOpen}
+        open={toastOpen}
+      />
     </View>
   );
 }
