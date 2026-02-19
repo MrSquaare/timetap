@@ -7,6 +7,6 @@ export const events = sqliteTable("events", {
   datetime: integer("datetime", { mode: "timestamp" }).notNull(),
   description: text("description").default("").notNull(),
   categoryId: integer("category_id")
-    .references(() => categories.id)
+    .references(() => categories.id, { onDelete: "cascade" })
     .notNull(),
 });

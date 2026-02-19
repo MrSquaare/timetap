@@ -15,6 +15,13 @@
       "when": 1770936645011,
       "tag": "0001_worthless_tony_stark",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1771533658818,
+      "tag": "0002_misty_longshot",
+      "breakpoints": true
     }
   ]
 }
