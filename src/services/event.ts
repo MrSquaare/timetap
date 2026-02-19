@@ -29,7 +29,7 @@ export const getEventById = async (params: GetEventByIdParams) => {
     .where(eq(events.id, params.id))
     .then((rows) => rows.at(0));
 
-  return event;
+  return event ?? null;
 };
 
 export type CreateEventPayload = Pick<

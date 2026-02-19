@@ -21,7 +21,6 @@ import { Center } from "../../../../../components/ui/Center";
 import { Spinner } from "../../../../../components/ui/Spinner";
 import { Text } from "../../../../../components/ui/Text";
 import {
-  useDeleteEventMutation,
   useEventByIdQuery,
   useUpdateEventMutation,
 } from "../../../../../lib/queries/event";
@@ -29,7 +28,10 @@ import {
 export default function EditEvent() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
-  const { eventId } = useLocalSearchParams<{ eventId: string }>();
+  const { categoryId, eventId } = useLocalSearchParams<{
+    categoryId: string;
+    eventId: string;
+  }>();
   const id = Number(eventId);
 
   const query = useEventByIdQuery(id);
@@ -42,9 +44,6 @@ export default function EditEvent() {
   };
 
   const updateMutation = useUpdateEventMutation({
-    onSuccess: routerBack,
-  });
-  const deleteMutation = useDeleteEventMutation({
     onSuccess: routerBack,
   });
 
@@ -62,8 +61,7 @@ export default function EditEvent() {
     },
   });
 
-  const isPending =
-    updateMutation.isPending || deleteMutation.isPending || query.isLoading;
+  const isPending = updateMutation.isPending || query.isLoading;
 
   return (
     <>
@@ -85,7 +83,11 @@ export default function EditEvent() {
               <BottomSheetAction
                 className={"text-destructive"}
                 disabled={isPending}
-                onPress={() => deleteMutation.mutate({ id })}
+                onPress={() =>
+                  router.push(
+                    `/categories/${categoryId}/events/${eventId}/delete`,
+                  )
+                }
               >
                 Delete
               </BottomSheetAction>

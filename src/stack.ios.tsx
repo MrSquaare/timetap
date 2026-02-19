@@ -50,6 +50,14 @@ export const AppStack = () => {
           animation: "none",
         }}
       />
+      <Stack.Screen
+        name={"categories/[categoryId]/events/[eventId]/delete"}
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "none",
+        }}
+      />
     </Stack>
   );
 };
