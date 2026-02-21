@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { View } from "react-native";
 
 import {
@@ -20,6 +20,7 @@ import { Button } from "../../../components/ui/Button";
 import { Center } from "../../../components/ui/Center";
 import { Spinner } from "../../../components/ui/Spinner";
 import { Text } from "../../../components/ui/Text";
+import { Toast } from "../../../components/ui/Toast";
 import {
   useCategoryByIdQuery,
   useUpdateCategoryMutation,
@@ -30,10 +31,17 @@ export default function CategoriesCreate() {
   const router = useRouter();
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
   const id = Number(categoryId);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const query = useCategoryByIdQuery(id);
   const mutation = useUpdateCategoryMutation({
     onSuccess: () => {
       router.back();
+    },
+    onError: (error) => {
+      console.error("Failed to update category", error);
+      setToastMessage("Unable to update category.");
+      setToastOpen(true);
     },
   });
   const form = useAppForm({
@@ -108,6 +116,11 @@ export default function CategoriesCreate() {
           </BottomSheetBody>
         </BottomSheetView>
       </BottomSheet>
+      <Toast
+        message={toastMessage}
+        onOpenChange={setToastOpen}
+        open={toastOpen}
+      />
     </>
   );
 }
