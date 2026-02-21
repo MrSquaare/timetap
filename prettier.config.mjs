@@ -32,4 +32,5 @@ export default {
     "ListHeaderComponentClassName",
   ],
   tailwindFunctions: ["tv", "useResolveClassNames"],
+  tailwindStylesheet: "./src/global.css",
 };
