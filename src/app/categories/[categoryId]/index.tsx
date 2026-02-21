@@ -40,7 +40,7 @@ const CategoriesDetailsHeaderActions: FC<{
   );
 };
 
-export default function CategoriesDetails() {
+export default function CategoryDetails() {
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
   const id = Number(categoryId);
   const categoryQuery = useCategoryByIdQuery(id);

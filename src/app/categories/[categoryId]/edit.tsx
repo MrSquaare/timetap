@@ -26,7 +26,7 @@ import {
   useUpdateCategoryMutation,
 } from "../../../lib/queries/category";
 
-export default function CategoriesCreate() {
+export default function EditCategory() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();

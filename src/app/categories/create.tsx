@@ -17,7 +17,7 @@ import {
 } from "../../components/ui/BottomSheet";
 import { useCreateCategoryMutation } from "../../lib/queries/category";
 
-export default function CategoriesCreate() {
+export default function CreateCategory() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
   const mutation = useCreateCategoryMutation({
