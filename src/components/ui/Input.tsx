@@ -39,7 +39,6 @@ export const Input: FC<InputProps> = ({
   selectionColorClassName,
   selectionHandleColorClassName,
   placeholderTextColorClassName,
-  underlineColorAndroidClassName,
   ...props
 }) => {
   const styles = inputStyles({ error, disabled });

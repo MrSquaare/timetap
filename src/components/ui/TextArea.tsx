@@ -40,7 +40,6 @@ export const TextArea: FC<TextAreaProps> = ({
   selectionColorClassName,
   selectionHandleColorClassName,
   placeholderTextColorClassName,
-  underlineColorAndroidClassName,
   ...props
 }) => {
   const styles = textAreaStyles({ error, disabled });
