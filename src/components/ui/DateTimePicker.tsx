@@ -14,7 +14,7 @@ import { Text } from "./Text";
 const dateTimePickerStyles = tv({
   slots: {
     root: "w-full rounded-lg border border-border px-4 py-2.5 text-sm text-foreground focus:border-foreground",
-    placeholder: "accent-muted",
+    placeholder: "text-muted",
   },
   variants: {
     error: {
