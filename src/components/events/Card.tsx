@@ -8,9 +8,9 @@ import { Text } from "../ui/Text";
 
 const eventCardStyles = tv({
   slots: {
-    root: "bg-surface border-border rounded-lg border p-4 shadow-xs",
+    root: "rounded-lg border border-border bg-surface p-4 shadow-xs",
     datetime: "text-base font-medium",
-    description: "text-muted mt-1 text-sm",
+    description: "mt-1 text-sm text-muted",
   },
 });
 

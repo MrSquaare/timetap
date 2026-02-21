@@ -13,7 +13,7 @@ import { Text } from "./Text";
 
 const dateTimePickerStyles = tv({
   slots: {
-    root: "text-foreground border-border focus:border-foreground w-full rounded-lg border px-4 py-2.5 text-sm",
+    root: "w-full rounded-lg border border-border px-4 py-2.5 text-sm text-foreground focus:border-foreground",
     placeholder: "accent-muted",
   },
   variants: {

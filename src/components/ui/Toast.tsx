@@ -12,9 +12,9 @@ import { Text } from "./Text";
 
 const toastStyles = tv({
   slots: {
-    root: "pb-safe absolute inset-x-0 bottom-10 items-center px-4",
-    content: "bg-foreground max-w-md rounded-lg px-4 py-2",
-    text: "text-background text-sm",
+    root: "absolute inset-x-0 bottom-10 items-center px-4 pb-safe",
+    content: "max-w-md rounded-lg bg-foreground px-4 py-2",
+    text: "text-sm text-background",
   },
 });
 

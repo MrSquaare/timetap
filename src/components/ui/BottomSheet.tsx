@@ -14,7 +14,7 @@ const bottomSheetStyles = tv({
     backdrop: "bg-foreground/33",
     background: "bg-background",
     indicator: "bg-foreground/50",
-    header: "border-border flex-row items-center border-b px-4 pb-4",
+    header: "flex-row items-center border-b border-border px-4 pb-4",
     title: "text-lg font-semibold",
     actionText: "font-medium",
     body: "p-4",

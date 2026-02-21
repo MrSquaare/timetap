@@ -9,7 +9,7 @@ import { Text } from "../ui/Text";
 
 const categoryCardStyles = tv({
   slots: {
-    root: "bg-surface border-border flex-row items-center justify-between rounded-lg border p-4 shadow-xs",
+    root: "flex-row items-center justify-between rounded-lg border border-border bg-surface p-4 shadow-xs",
     text: "text-base font-medium",
   },
 });

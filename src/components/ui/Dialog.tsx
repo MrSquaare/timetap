@@ -16,13 +16,13 @@ import { Text, TextProps } from "./Text";
 const dialogStyles = tv({
   slots: {
     root: "absolute inset-0",
-    backdrop: "bg-foreground/33 absolute inset-0",
+    backdrop: "absolute inset-0 bg-foreground/33",
     contentContainer: "flex-1 items-center justify-center p-4",
     contentWrapper: "w-full max-w-md",
-    content: "bg-background border-border w-full gap-4 rounded-xl border p-4",
+    content: "w-full gap-4 rounded-xl border border-border bg-background p-4",
     header: "gap-1",
     title: "text-lg font-semibold",
-    description: "text-muted text-sm",
+    description: "text-sm text-muted",
     footer: "flex-row justify-end gap-2",
   },
 });

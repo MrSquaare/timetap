@@ -3,7 +3,7 @@ import * as RN from "react-native";
 import { tv } from "tailwind-variants";
 
 const textStyles = tv({
-  base: "text-foreground text-base",
+  base: "text-base text-foreground",
 });
 
 export type TextProps = RN.TextProps;

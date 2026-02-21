@@ -53,7 +53,7 @@ export default function Home() {
   };
 
   return (
-    <View className={"bg-background flex-1"}>
+    <View className={"flex-1 bg-background"}>
       <Stack.Screen
         options={{
           title: "Home",

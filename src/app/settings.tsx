@@ -9,7 +9,7 @@ export default function Settings() {
   const { theme, setTheme } = useThemeStore();
 
   return (
-    <View className={"bg-background flex-1"}>
+    <View className={"flex-1 bg-background"}>
       <Stack.Screen
         options={{
           title: "Settings",

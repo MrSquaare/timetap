@@ -63,7 +63,7 @@ export default function CategoriesDetails() {
   }
 
   return (
-    <View className={"bg-background flex-1"}>
+    <View className={"flex-1 bg-background"}>
       <Stack.Screen
         options={{
           title: categoryQuery.data.name,

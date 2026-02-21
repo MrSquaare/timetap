@@ -95,7 +95,7 @@ function AppLoader() {
 
 function AppError({ error }: { error: Error }) {
   return (
-    <View className={"bg-background flex-1 items-center justify-center p-4"}>
+    <View className={"flex-1 items-center justify-center bg-background p-4"}>
       <Text className={"text-red-500"}>{error.message}</Text>
     </View>
   );
@@ -110,7 +110,7 @@ export default function App() {
     <>
       <StatusBar />
       <AppWrapper>
-        <View className={"bg-background p-safe flex-1"}>
+        <View className={"flex-1 bg-background p-safe"}>
           <AppLoader />
         </View>
         <PortalHost />

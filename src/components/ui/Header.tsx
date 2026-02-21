@@ -15,7 +15,7 @@ const headerStyles = tv({
     backButtonText: "text-sm",
   },
   variants: {
-    shadow: { true: { root: "border-border border-b" }, false: {} },
+    shadow: { true: { root: "border-b border-border" }, false: {} },
     transparent: { true: {}, false: { root: "bg-background" } },
   },
   defaultVariants: {
