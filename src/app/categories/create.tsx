@@ -1,5 +1,5 @@
 import { Stack, useRouter } from "expo-router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
   CategoriesCreateEditForm,
@@ -15,14 +15,22 @@ import {
   BottomSheetTitle,
   BottomSheetView,
 } from "../../components/ui/BottomSheet";
+import { Toast } from "../../components/ui/Toast";
 import { useCreateCategoryMutation } from "../../lib/queries/category";
 
 export default function CreateCategory() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const mutation = useCreateCategoryMutation({
     onSuccess: () => {
       router.back();
+    },
+    onError: (error) => {
+      console.error("Failed to create category", error);
+      setToastMessage("Unable to create category.");
+      setToastOpen(true);
     },
   });
   const form = useAppForm({
@@ -75,6 +83,11 @@ export default function CreateCategory() {
           </BottomSheetBody>
         </BottomSheetView>
       </BottomSheet>
+      <Toast
+        message={toastMessage}
+        onOpenChange={setToastOpen}
+        open={toastOpen}
+      />
     </>
   );
 }
