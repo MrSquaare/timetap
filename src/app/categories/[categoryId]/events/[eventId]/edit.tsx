@@ -81,7 +81,6 @@ export default function EditEvent() {
           <BottomSheetHeader
             left={
               <BottomSheetAction
-                className={"text-destructive"}
                 disabled={isPending}
                 onPress={() =>
                   router.push(
