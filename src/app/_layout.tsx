@@ -28,7 +28,7 @@ const useLoader = () => {
 
   const loaded = useMemo(() => {
     const migrationLoaded = migrationResult.success || !!migrationResult.error;
-    const fontLoaded = fontResult[0];
+    const fontLoaded = fontResult[0] || !!fontResult[1];
 
     return migrationLoaded && fontLoaded;
   }, [migrationResult, fontResult]);
