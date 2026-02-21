@@ -1,4 +1,5 @@
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 
 import {
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
 } from "../../../../../components/ui/Dialog";
 import { Text } from "../../../../../components/ui/Text";
+import { Toast } from "../../../../../components/ui/Toast";
 import { useDeleteEventMutation } from "../../../../../lib/queries/event";
 
 export default function DeleteEvent() {
@@ -18,10 +20,17 @@ export default function DeleteEvent() {
     eventId: string;
   }>();
   const id = Number(eventId);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const mutation = useDeleteEventMutation({
     onSuccess: () => {
       router.dismissTo(`/categories/${categoryId}`);
+    },
+    onError: (error) => {
+      console.error("Failed to delete event", error);
+      setToastMessage("Unable to delete event.");
+      setToastOpen(true);
     },
   });
 
@@ -64,6 +73,11 @@ export default function DeleteEvent() {
           </DialogAction>
         </DialogFooter>
       </Dialog>
+      <Toast
+        message={toastMessage}
+        onOpenChange={setToastOpen}
+        open={toastOpen}
+      />
     </>
   );
 }

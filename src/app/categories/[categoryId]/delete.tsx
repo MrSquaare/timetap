@@ -1,4 +1,5 @@
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 
 import {
   Dialog,
@@ -9,16 +10,24 @@ import {
   DialogTitle,
 } from "../../../components/ui/Dialog";
 import { Text } from "../../../components/ui/Text";
+import { Toast } from "../../../components/ui/Toast";
 import { useDeleteCategoryMutation } from "../../../lib/queries/category";
 
 export default function DeleteCategory() {
   const router = useRouter();
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
   const id = Number(categoryId);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const mutation = useDeleteCategoryMutation({
     onSuccess: () => {
       router.dismissTo("/");
+    },
+    onError: (error) => {
+      console.error("Failed to delete category", error);
+      setToastMessage("Unable to delete category.");
+      setToastOpen(true);
     },
   });
 
@@ -63,6 +72,11 @@ export default function DeleteCategory() {
           </DialogAction>
         </DialogFooter>
       </Dialog>
+      <Toast
+        message={toastMessage}
+        onOpenChange={setToastOpen}
+        open={toastOpen}
+      />
     </>
   );
 }
