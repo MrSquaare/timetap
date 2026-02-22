@@ -10,6 +10,7 @@
     "ios": "expo start --ios",
     "lint": "expo lint .",
     "lint:fix": "expo lint . --fix",
+    "type-check": "tsc --noEmit",
     "clean": "del-cli .expo/ dist/",
     "db:generate": "drizzle-kit generate",
     "deps:update": "taze",
