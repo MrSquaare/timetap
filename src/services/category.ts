@@ -49,9 +49,7 @@ export const updateCategory = async (payload: UpdateCategoryPayload) => {
 
   const category = await database
     .update(categories)
-    .set({
-      name: payload.name,
-    })
+    .set(updates)
     .where(eq(categories.id, payload.id))
     .returning()
     .then((rows) => rows.at(0));

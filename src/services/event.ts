@@ -60,10 +60,7 @@ export const updateEvent = async (payload: UpdateEventPayload) => {
 
   const event = await database
     .update(events)
-    .set({
-      datetime: payload.datetime,
-      description: payload.description,
-    })
+    .set(updates)
     .where(eq(events.id, payload.id))
     .returning()
     .then((rows) => rows.at(0));
