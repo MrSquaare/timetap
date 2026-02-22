@@ -47,25 +47,38 @@ export type UpdateEventPayload = Pick<Event, "id"> &
   Partial<Pick<Event, "datetime" | "description">>;
 
 export const updateEvent = async (payload: UpdateEventPayload) => {
-  const [event] = await database
+  const updates = Object.fromEntries(
+    Object.entries({
+      datetime: payload.datetime,
+      description: payload.description,
+    }).filter(([, value]) => value !== undefined),
+  );
+
+  if (Object.keys(updates).length === 0) {
+    return getEventById({ id: payload.id });
+  }
+
+  const event = await database
     .update(events)
     .set({
       datetime: payload.datetime,
       description: payload.description,
     })
     .where(eq(events.id, payload.id))
-    .returning();
+    .returning()
+    .then((rows) => rows.at(0));
 
-  return event;
+  return event ?? null;
 };
 
 export type DeleteEventPayload = Pick<Event, "id">;
 
 export const deleteEvent = async (payload: DeleteEventPayload) => {
-  const [event] = await database
+  const event = await database
     .delete(events)
     .where(eq(events.id, payload.id))
-    .returning();
+    .returning()
+    .then((rows) => rows.at(0));
 
-  return event;
+  return event ?? null;
 };

@@ -37,24 +37,36 @@ export type UpdateCategoryPayload = Pick<Category, "id"> &
   Partial<Pick<Category, "name">>;
 
 export const updateCategory = async (payload: UpdateCategoryPayload) => {
-  const [category] = await database
+  const updates = Object.fromEntries(
+    Object.entries({ name: payload.name }).filter(
+      ([, value]) => value !== undefined,
+    ),
+  );
+
+  if (Object.keys(updates).length === 0) {
+    return getCategoryById({ id: payload.id });
+  }
+
+  const category = await database
     .update(categories)
     .set({
       name: payload.name,
     })
     .where(eq(categories.id, payload.id))
-    .returning();
+    .returning()
+    .then((rows) => rows.at(0));
 
-  return category;
+  return category ?? null;
 };
 
 export type DeleteCategoryPayload = Pick<Category, "id">;
 
 export const deleteCategory = async (payload: DeleteCategoryPayload) => {
-  const [category] = await database
+  const category = await database
     .delete(categories)
     .where(eq(categories.id, payload.id))
-    .returning();
+    .returning()
+    .then((rows) => rows.at(0));
 
-  return category;
+  return category ?? null;
 };
