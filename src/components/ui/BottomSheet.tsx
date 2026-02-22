@@ -41,7 +41,7 @@ const RootComponent = withUniwind(BS.default, {
 
 export type BottomSheetProps = ComponentProps<typeof RootComponent>;
 export const BottomSheet: FC<BottomSheetProps> = ({
-  className,
+  backgroundClassName,
   handleIndicatorClassName,
   ...props
 }) => {
@@ -52,7 +52,9 @@ export const BottomSheet: FC<BottomSheetProps> = ({
       <RootComponent
         {...props}
         animateOnMount={true}
-        backgroundClassName={styles.background({ className })}
+        backgroundClassName={styles.background({
+          className: backgroundClassName,
+        })}
         enablePanDownToClose={true}
         handleIndicatorClassName={styles.indicator({
           className: handleIndicatorClassName,
