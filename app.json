@@ -29,6 +29,9 @@
       "expo-router",
       "expo-sqlite",
       "@react-native-community/datetimepicker"
-    ]
+    ],
+    "experiments": {
+      "reactCompiler": true
+    }
   }
 }
