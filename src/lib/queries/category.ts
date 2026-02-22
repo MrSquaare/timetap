@@ -89,8 +89,11 @@ export const useCreateCategoryMutation = (
 
 const updateCategoryMutationOptions = mutationOptions({
   mutationFn: updateCategory,
-  onSuccess: () => {
+  onSuccess: (data) => {
+    if (!data) return;
+
     queryClient.invalidateQueries({ queryKey: categoryKeys.list() });
+    queryClient.invalidateQueries({ queryKey: categoryKeys.detail(data.id) });
   },
 });
 
@@ -112,10 +115,12 @@ export const useUpdateCategoryMutation = (
 
 const deleteCategoryMutationOptions = mutationOptions({
   mutationFn: deleteCategory,
-  onSuccess: (_, { id }) => {
+  onSuccess: (data) => {
+    if (!data) return;
+
     queryClient.invalidateQueries({ queryKey: categoryKeys.list() });
-    queryClient.invalidateQueries({ queryKey: categoryKeys.detail(id) });
-    queryClient.invalidateQueries({ queryKey: eventKeys.list(id) });
+    queryClient.invalidateQueries({ queryKey: categoryKeys.detail(data.id) });
+    queryClient.invalidateQueries({ queryKey: eventKeys.list(data.id) });
   },
 });
 

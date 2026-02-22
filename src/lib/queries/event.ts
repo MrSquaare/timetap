@@ -86,14 +86,14 @@ export const useCreateEventMutation = (
 const updateEventMutationOptions = mutationOptions({
   mutationFn: updateEvent,
   onSuccess: (data) => {
-    if (data) {
-      queryClient.invalidateQueries({
-        queryKey: eventKeys.detail(data.id),
-      });
-      queryClient.invalidateQueries({
-        queryKey: eventKeys.list(data.categoryId),
-      });
-    }
+    if (!data) return;
+
+    queryClient.invalidateQueries({
+      queryKey: eventKeys.list(data.categoryId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: eventKeys.detail(data.id),
+    });
   },
 });
 
@@ -116,11 +116,14 @@ export const useUpdateEventMutation = (
 const deleteEventMutationOptions = mutationOptions({
   mutationFn: deleteEvent,
   onSuccess: (data) => {
-    if (data) {
-      queryClient.invalidateQueries({
-        queryKey: eventKeys.list(data.categoryId),
-      });
-    }
+    if (!data) return;
+
+    queryClient.invalidateQueries({
+      queryKey: eventKeys.list(data.categoryId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: eventKeys.detail(data.id),
+    });
   },
 });
 
