@@ -1,4 +1,5 @@
-onlyBuiltDependencies:
-  - unrs-resolver
-
 nodeLinker: hoisted
+
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver

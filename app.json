@@ -25,7 +25,13 @@
       "predictiveBackGestureEnabled": false
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-font",
+      "expo-router",
+      "expo-sqlite",
+      "@react-native-community/datetimepicker"
+    ],
+    "experiments": {
+      "reactCompiler": true
+    }
   }
 }
