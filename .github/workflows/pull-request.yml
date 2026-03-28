@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   checks:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
@@ -23,3 +23,98 @@ jobs:
 
       - name: Type Check
         run: pnpm type-check
+
+  android-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Export
+        run: pnpm expo export --platform android
+
+      - name: Get fingerprint
+        id: fingerprint
+        run: |
+          echo "hash=$(pnpm dlx @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')" >> $GITHUB_OUTPUT
+
+      - name: Generate prebuild
+        run: pnpm expo prebuild --platform android --no-install
+
+      - name: Cache Gradle
+        uses: actions/cache@v5
+        id: gradle
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+          key: ${{ runner.os }}-gradle-${{ steps.fingerprint.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Cache Build
+        uses: actions/cache@v5
+        id: build
+        with:
+          path: |
+            android/app/build
+          key: ${{ runner.os }}-build-${{ steps.fingerprint.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Build
+        working-directory: ./android
+        if: steps.gradle.outputs.cache-hit != 'true' || steps.build.outputs.cache-hit != 'true'
+        run: ./gradlew assembleDebug --build-cache --parallel
+
+  ios-build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Export
+        run: pnpm expo export --platform ios
+
+      - name: Set Xcode version
+        run: sudo xcode-select --switch "/Applications/Xcode_26.3.app/Contents/Developer"
+
+      - name: Get fingerprint
+        id: fingerprint
+        run: |
+          echo "hash=$(pnpm dlx @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')" >> $GITHUB_OUTPUT
+
+      - name: Generate prebuild
+        run: pnpm expo prebuild --platform ios --no-install
+
+      - name: CocoaPods Cache
+        uses: actions/cache@v5
+        id: pods
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ steps.fingerprint.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install CocoaPods
+        working-directory: ./ios
+        run: pod install
+
+      - name: Cache Xcode derived data
+        uses: actions/cache@v5
+        id: xcode-derived-data
+        with:
+          path: ios/build
+          key: ${{ runner.os }}-xcode-derived-data-${{ steps.fingerprint.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-derived-data-
+
+      - name: Build
+        working-directory: ./ios
+        if: steps.pods.outputs.cache-hit != 'true' || steps.xcode-derived-data.outputs.cache-hit != 'true'
+        run: set -o pipefail && xcodebuild build -workspace TimeTap.xcworkspace -scheme TimeTap -configuration Debug -destination "generic/platform=iOS Simulator" -derivedDataPath build | xcbeautify
