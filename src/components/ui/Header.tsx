@@ -1,4 +1,4 @@
-import { NativeStackHeaderProps } from "@react-navigation/native-stack";
+import { NativeStackHeaderProps } from "expo-router";
 import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import { tv } from "tailwind-variants";
