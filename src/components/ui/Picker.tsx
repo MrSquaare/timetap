@@ -3,7 +3,6 @@ import {
   FC,
   PropsWithChildren,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -106,21 +105,14 @@ export const PickerRoot: FC<PickerRootProps> = ({
   className,
 }) => {
   const isControlled = value !== undefined;
-  const [internalValue, setInternalValue] = useState<string | undefined>(
-    value ?? defaultValue,
+  const [localValue, setLocalValue] = useState<string | undefined>(
+    defaultValue,
   );
-
-  useEffect(() => {
-    if (isControlled) {
-      setInternalValue(value);
-    }
-  }, [isControlled, value]);
-
-  const selectedValue = internalValue;
+  const selectedValue = isControlled ? value : localValue;
 
   const selectValue = (nextValue: string) => {
     if (!isControlled) {
-      setInternalValue(nextValue);
+      setLocalValue(nextValue);
     }
 
     onValueChange?.(nextValue);
