@@ -1,6 +1,6 @@
 import RNDateTimePicker, {
   AndroidNativeProps,
-  DateTimePickerEvent,
+  DateTimePickerChangeEvent,
   IOSNativeProps,
 } from "@react-native-community/datetimepicker";
 import { FC, useState } from "react";
@@ -37,7 +37,12 @@ const dateTimePickerStyles = tv({
 
 export type DateTimePickerProps = Omit<
   AndroidNativeProps & IOSNativeProps,
-  "onChange" | "value" | "mode"
+  | "onChange"
+  | "onValueChange"
+  | "onDismiss"
+  | "onNeutralButtonPress"
+  | "value"
+  | "mode"
 > & {
   mode: "date" | "time" | "datetime";
   value: Date;
@@ -59,12 +64,19 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   const styles = dateTimePickerStyles({ error, disabled });
   const [show, setShow] = useState(false);
 
-  const handleChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+  const handleValueChange = (
+    event: DateTimePickerChangeEvent,
+    selectedDate: Date,
+  ) => {
     setShow(false);
 
-    if (selectedDate && onChange) {
+    if (onChange) {
       onChange(selectedDate);
     }
+  };
+
+  const handleDismiss = () => {
+    setShow(false);
   };
 
   const displayValue = () => {
@@ -91,7 +103,9 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           design={"material"}
           disabled={disabled}
           mode={mode === "datetime" ? "date" : mode}
-          onChange={handleChange}
+          onDismiss={handleDismiss}
+          onNeutralButtonPress={handleDismiss}
+          onValueChange={handleValueChange}
           value={value || new Date()}
           {...props}
         />
