@@ -1,5 +1,5 @@
 import RNDateTimePicker, {
-  DateTimePickerEvent,
+  DateTimePickerChangeEvent,
 } from "@react-native-community/datetimepicker";
 import { FC } from "react";
 import { View } from "react-native";
@@ -16,8 +16,11 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   className,
   ...props
 }) => {
-  const handleChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    if (selectedDate && onChange) {
+  const handleValueChange = (
+    event: DateTimePickerChangeEvent,
+    selectedDate: Date,
+  ) => {
+    if (onChange) {
       onChange(selectedDate);
     }
   };
@@ -27,7 +30,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
       <RNDateTimePicker
         disabled={disabled}
         mode={mode}
-        onChange={handleChange}
+        onValueChange={handleValueChange}
         value={value}
         {...props}
       />
