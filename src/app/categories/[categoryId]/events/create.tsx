@@ -1,5 +1,5 @@
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 
 import {
   EventsCreateEditForm,
@@ -7,19 +7,16 @@ import {
   useAppForm,
 } from "../../../../components/events/CreateEditForm";
 import {
-  BottomSheet,
-  BottomSheetAction,
-  BottomSheetBackdrop,
-  BottomSheetBody,
-  BottomSheetHeader,
-  BottomSheetTitle,
-  BottomSheetView,
-} from "../../../../components/ui/BottomSheet";
+  SheetAction,
+  SheetBody,
+  SheetHeader,
+  SheetTitle,
+  SheetView,
+} from "../../../../components/ui/Sheet";
 import { Toast } from "../../../../components/ui/Toast";
 import { useCreateEventMutation } from "../../../../lib/queries/event";
 
 export default function CreateEvent() {
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
   const [toastOpen, setToastOpen] = useState(false);
@@ -52,44 +49,31 @@ export default function CreateEvent() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-          presentation: "transparentModal",
-          animation: "none",
-        }}
-      />
-      <BottomSheet
-        backdropComponent={BottomSheetBackdrop}
-        onClose={() => router.back()}
-        ref={bottomSheetRef}
-      >
-        <BottomSheetView>
-          <BottomSheetHeader
-            left={
-              <BottomSheetAction
-                disabled={mutation.isPending}
-                onPress={() => router.back()}
-              >
-                Close
-              </BottomSheetAction>
-            }
-            right={
-              <BottomSheetAction
-                disabled={mutation.isPending}
-                onPress={() => form.handleSubmit()}
-              >
-                Create
-              </BottomSheetAction>
-            }
-          >
-            <BottomSheetTitle>Create Event</BottomSheetTitle>
-          </BottomSheetHeader>
-          <BottomSheetBody>
-            <EventsCreateEditForm form={form} isPending={mutation.isPending} />
-          </BottomSheetBody>
-        </BottomSheetView>
-      </BottomSheet>
+      <SheetView>
+        <SheetHeader
+          left={
+            <SheetAction
+              disabled={mutation.isPending}
+              onPress={() => router.back()}
+            >
+              Close
+            </SheetAction>
+          }
+          right={
+            <SheetAction
+              disabled={mutation.isPending}
+              onPress={() => form.handleSubmit()}
+            >
+              Create
+            </SheetAction>
+          }
+        >
+          <SheetTitle>Create Event</SheetTitle>
+        </SheetHeader>
+        <SheetBody>
+          <EventsCreateEditForm form={form} isPending={mutation.isPending} />
+        </SheetBody>
+      </SheetView>
       <Toast
         message={toastMessage}
         onOpenChange={setToastOpen}

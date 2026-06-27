@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 
 import {
@@ -36,13 +36,6 @@ export default function DeleteEvent() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-          presentation: "transparentModal",
-          animation: "none",
-        }}
-      />
       <Dialog
         onOpenChange={(open) => {
           if (!open) {

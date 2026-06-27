@@ -1,5 +1,5 @@
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 import { View } from "react-native";
 
 import {
@@ -7,17 +7,15 @@ import {
   formOpts,
   useAppForm,
 } from "../../../../../components/events/CreateEditForm";
-import {
-  BottomSheet,
-  BottomSheetAction,
-  BottomSheetBackdrop,
-  BottomSheetBody,
-  BottomSheetHeader,
-  BottomSheetTitle,
-  BottomSheetView,
-} from "../../../../../components/ui/BottomSheet";
 import { Button } from "../../../../../components/ui/Button";
 import { Center } from "../../../../../components/ui/Center";
+import {
+  SheetAction,
+  SheetBody,
+  SheetHeader,
+  SheetTitle,
+  SheetView,
+} from "../../../../../components/ui/Sheet";
 import { Spinner } from "../../../../../components/ui/Spinner";
 import { Text } from "../../../../../components/ui/Text";
 import { Toast } from "../../../../../components/ui/Toast";
@@ -27,7 +25,6 @@ import {
 } from "../../../../../lib/queries/event";
 
 export default function EditEvent() {
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
   const { categoryId, eventId } = useLocalSearchParams<{
     categoryId: string;
@@ -73,71 +70,58 @@ export default function EditEvent() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-          presentation: "transparentModal",
-          animation: "none",
-        }}
-      />
-      <BottomSheet
-        backdropComponent={BottomSheetBackdrop}
-        onClose={() => router.back()}
-        ref={bottomSheetRef}
-      >
-        <BottomSheetView>
-          <BottomSheetHeader
-            left={
-              <BottomSheetAction
+      <SheetView>
+        <SheetHeader
+          left={
+            <SheetAction
+              disabled={isPending}
+              onPress={() =>
+                router.push(
+                  `/categories/${categoryId}/events/${eventId}/delete`,
+                )
+              }
+            >
+              Delete
+            </SheetAction>
+          }
+          right={
+            query.data ? (
+              <SheetAction
                 disabled={isPending}
-                onPress={() =>
-                  router.push(
-                    `/categories/${categoryId}/events/${eventId}/delete`,
-                  )
-                }
+                onPress={() => form.handleSubmit()}
               >
-                Delete
-              </BottomSheetAction>
-            }
-            right={
-              query.data ? (
-                <BottomSheetAction
-                  disabled={isPending}
-                  onPress={() => form.handleSubmit()}
-                >
-                  Save
-                </BottomSheetAction>
-              ) : null
-            }
-          >
-            <BottomSheetTitle>Edit Event</BottomSheetTitle>
-          </BottomSheetHeader>
-          <BottomSheetBody>
-            {query.isLoading ? (
-              <Center>
-                <Spinner size={64} />
-              </Center>
-            ) : query.isError ? (
-              <Center>
-                <Text className={"mb-2 text-lg"}>Error loading event.</Text>
-                <View className={"flex-row gap-2"}>
-                  <Button onPress={() => router.back()} size={"lg"}>
-                    <Text>Back</Text>
-                  </Button>
-                  <Button onPress={() => query.refetch()} size={"lg"}>
-                    <Text>Retry</Text>
-                  </Button>
-                </View>
-              </Center>
-            ) : (
-              <EventsCreateEditForm
-                form={form}
-                isPending={updateMutation.isPending}
-              />
-            )}
-          </BottomSheetBody>
-        </BottomSheetView>
-      </BottomSheet>
+                Save
+              </SheetAction>
+            ) : null
+          }
+        >
+          <SheetTitle>Edit Event</SheetTitle>
+        </SheetHeader>
+        <SheetBody>
+          {query.isLoading ? (
+            <Center>
+              <Spinner size={64} />
+            </Center>
+          ) : query.isError ? (
+            <Center>
+              <Text className={"mb-2 text-lg"}>Error loading event.</Text>
+              <View className={"flex-row gap-2"}>
+                <Button onPress={routerBack} size={"lg"}>
+                  <Text>Back</Text>
+                </Button>
+                <Button onPress={() => query.refetch()} size={"lg"}>
+                  <Text>Retry</Text>
+                </Button>
+              </View>
+            </Center>
+          ) : (
+            <EventsCreateEditForm
+              form={form}
+              isPending={updateMutation.isPending}
+            />
+          )}
+        </SheetBody>
+      </SheetView>
       <Toast
         message={toastMessage}
         onOpenChange={setToastOpen}

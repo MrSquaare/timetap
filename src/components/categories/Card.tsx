@@ -1,5 +1,6 @@
+import { Link } from "expo-router";
 import { FC } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { tv } from "tailwind-variants";
 
 import { Category } from "../../schemas/category";
@@ -9,15 +10,19 @@ import { Text } from "../ui/Text";
 
 const categoryCardStyles = tv({
   slots: {
-    root: "flex-row items-center justify-between rounded-lg border border-border bg-surface p-4 shadow-xs",
+    root: "flex-row justify-between rounded-lg border border-border bg-surface shadow-xs",
+    details: "flex-1 justify-center py-4 pr-2 pl-4",
     text: "text-base font-medium",
+    quickAdd: "justify-center px-4",
   },
 });
 
 export type CategoryCardProps = {
   category: Category;
   className?: string;
+  detailsClassName?: string;
   textClassName?: string;
+  quickAddClassName?: string;
   onQuickAdd?: () => void;
   quickAddDisabled?: boolean;
 };
@@ -25,7 +30,9 @@ export type CategoryCardProps = {
 export const CategoryCard: FC<CategoryCardProps> = ({
   category,
   className,
+  detailsClassName,
   textClassName,
+  quickAddClassName,
   onQuickAdd,
   quickAddDisabled,
 }) => {
@@ -33,12 +40,17 @@ export const CategoryCard: FC<CategoryCardProps> = ({
 
   return (
     <View className={styles.root({ className })}>
-      <Text className={styles.text({ className: textClassName })}>
-        {category.name}
-      </Text>
+      <Link asChild href={`/categories/${category.id}`}>
+        <Pressable className={styles.details({ className: detailsClassName })}>
+          <Text className={styles.text({ className: textClassName })}>
+            {category.name}
+          </Text>
+        </Pressable>
+      </Link>
       {onQuickAdd ? (
         <Button
           accessibilityLabel={`Quick add event to ${category.name}`}
+          className={styles.quickAdd({ className: quickAddClassName })}
           disabled={quickAddDisabled}
           hitSlop={8}
           onPress={() => onQuickAdd()}

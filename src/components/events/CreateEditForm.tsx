@@ -45,14 +45,12 @@ export const EventsCreateEditForm = withForm({
           <Field.Root errors={field.state.meta.errors}>
             <Field.Label>Date & Time</Field.Label>
             {Platform.OS === "ios" ? (
-              <View className={"items-center"}>
-                <DateTimePicker
-                  disabled={isPending}
-                  mode={"datetime"}
-                  onChange={(date) => field.handleChange(date)}
-                  value={field.state.value}
-                />
-              </View>
+              <DateTimePicker
+                disabled={isPending}
+                mode={"datetime"}
+                onChange={(date) => field.handleChange(date)}
+                value={field.state.value}
+              />
             ) : (
               <View className={"flex-row gap-2"}>
                 <View className={"flex-1"}>

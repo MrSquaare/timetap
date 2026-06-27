@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import { Link, Stack } from "expo-router";
 import { FC, useState } from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
 import { CategoryCard } from "../components/categories/Card";
 import { Button } from "../components/ui/Button";
@@ -78,15 +78,11 @@ export default function Home() {
           contentContainerClassName={"p-4"}
           data={query.data}
           renderItem={({ item }) => (
-            <Link asChild href={`/categories/${item.id}`}>
-              <Pressable>
-                <CategoryCard
-                  category={item}
-                  onQuickAdd={() => handleQuickAdd(item.id, item.name)}
-                  quickAddDisabled={createEventMutation.isPending}
-                />
-              </Pressable>
-            </Link>
+            <CategoryCard
+              category={item}
+              onQuickAdd={() => handleQuickAdd(item.id, item.name)}
+              quickAddDisabled={createEventMutation.isPending}
+            />
           )}
         />
       ) : (

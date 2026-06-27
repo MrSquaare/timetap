@@ -1,6 +1,6 @@
-import RNDateTimePicker, {
+import ExpoDateTimePicker, {
   DateTimePickerChangeEvent,
-} from "@react-native-community/datetimepicker";
+} from "@expo/ui/community/datetime-picker";
 import { FC } from "react";
 import { View } from "react-native";
 
@@ -13,7 +13,6 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   onChange,
   disabled,
   error,
-  className,
   ...props
 }) => {
   const handleValueChange = (
@@ -27,7 +26,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
 
   return (
     <View>
-      <RNDateTimePicker
+      <ExpoDateTimePicker
         disabled={disabled}
         mode={mode}
         onValueChange={handleValueChange}
