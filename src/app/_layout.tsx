@@ -9,7 +9,6 @@ import { StatusBar } from "expo-status-bar";
 import { PropsWithChildren, useEffect, useMemo } from "react";
 import { View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaListener } from "react-native-safe-area-context";
 import { Uniwind } from "uniwind";
 
@@ -61,9 +60,7 @@ function AppWrapper({ children }: PropsWithChildren) {
       }}
     >
       <QueryClientProvider client={queryClient}>
-        <KeyboardProvider>
-          <GestureHandlerRootView>{children}</GestureHandlerRootView>
-        </KeyboardProvider>
+        <GestureHandlerRootView>{children}</GestureHandlerRootView>
       </QueryClientProvider>
     </SafeAreaListener>
   );

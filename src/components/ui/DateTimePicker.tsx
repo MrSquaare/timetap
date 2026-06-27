@@ -1,8 +1,7 @@
-import RNDateTimePicker, {
-  AndroidNativeProps,
+import ExpoDateTimePicker, {
   DateTimePickerChangeEvent,
-  IOSNativeProps,
-} from "@react-native-community/datetimepicker";
+  DateTimePickerProps as ExpoDateTimePickerProps,
+} from "@expo/ui/community/datetime-picker";
 import { FC, useState } from "react";
 import { Pressable, View } from "react-native";
 import { tv, VariantProps } from "tailwind-variants";
@@ -36,13 +35,8 @@ const dateTimePickerStyles = tv({
 });
 
 export type DateTimePickerProps = Omit<
-  AndroidNativeProps & IOSNativeProps,
-  | "onChange"
-  | "onValueChange"
-  | "onDismiss"
-  | "onNeutralButtonPress"
-  | "value"
-  | "mode"
+  ExpoDateTimePickerProps,
+  "onChange" | "onValueChange" | "onDismiss" | "value" | "mode"
 > & {
   mode: "date" | "time" | "datetime";
   value: Date;
@@ -99,12 +93,10 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
         </Text>
       </Pressable>
       {show && (
-        <RNDateTimePicker
-          design={"material"}
+        <ExpoDateTimePicker
           disabled={disabled}
           mode={mode === "datetime" ? "date" : mode}
           onDismiss={handleDismiss}
-          onNeutralButtonPress={handleDismiss}
           onValueChange={handleValueChange}
           value={value || new Date()}
           {...props}

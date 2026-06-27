@@ -1,5 +1,5 @@
-import { Stack, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 
 import {
   CategoriesCreateEditForm,
@@ -7,19 +7,16 @@ import {
   useAppForm,
 } from "../../components/categories/CreateEditForm";
 import {
-  BottomSheet,
-  BottomSheetAction,
-  BottomSheetBackdrop,
-  BottomSheetBody,
-  BottomSheetHeader,
-  BottomSheetTitle,
-  BottomSheetView,
-} from "../../components/ui/BottomSheet";
+  SheetAction,
+  SheetBody,
+  SheetHeader,
+  SheetTitle,
+  SheetView,
+} from "../../components/ui/Sheet";
 import { Toast } from "../../components/ui/Toast";
 import { useCreateCategoryMutation } from "../../lib/queries/category";
 
 export default function CreateCategory() {
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -42,47 +39,34 @@ export default function CreateCategory() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-          presentation: "transparentModal",
-          animation: "none",
-        }}
-      />
-      <BottomSheet
-        backdropComponent={BottomSheetBackdrop}
-        onClose={() => router.back()}
-        ref={bottomSheetRef}
-      >
-        <BottomSheetView>
-          <BottomSheetHeader
-            left={
-              <BottomSheetAction
-                disabled={mutation.isPending}
-                onPress={() => router.back()}
-              >
-                Close
-              </BottomSheetAction>
-            }
-            right={
-              <BottomSheetAction
-                disabled={mutation.isPending}
-                onPress={() => form.handleSubmit()}
-              >
-                Create
-              </BottomSheetAction>
-            }
-          >
-            <BottomSheetTitle>Create Category</BottomSheetTitle>
-          </BottomSheetHeader>
-          <BottomSheetBody>
-            <CategoriesCreateEditForm
-              form={form}
-              isPending={mutation.isPending}
-            />
-          </BottomSheetBody>
-        </BottomSheetView>
-      </BottomSheet>
+      <SheetView>
+        <SheetHeader
+          left={
+            <SheetAction
+              disabled={mutation.isPending}
+              onPress={() => router.back()}
+            >
+              Close
+            </SheetAction>
+          }
+          right={
+            <SheetAction
+              disabled={mutation.isPending}
+              onPress={() => form.handleSubmit()}
+            >
+              Create
+            </SheetAction>
+          }
+        >
+          <SheetTitle>Create Category</SheetTitle>
+        </SheetHeader>
+        <SheetBody>
+          <CategoriesCreateEditForm
+            form={form}
+            isPending={mutation.isPending}
+          />
+        </SheetBody>
+      </SheetView>
       <Toast
         message={toastMessage}
         onOpenChange={setToastOpen}
