@@ -106,7 +106,7 @@ export default function EditEvent() {
             <Center>
               <Text className={"mb-2 text-lg"}>Error loading event.</Text>
               <View className={"flex-row gap-2"}>
-                <Button onPress={() => router.back()} size={"lg"}>
+                <Button onPress={routerBack} size={"lg"}>
                   <Text>Back</Text>
                 </Button>
                 <Button onPress={() => query.refetch()} size={"lg"}>
