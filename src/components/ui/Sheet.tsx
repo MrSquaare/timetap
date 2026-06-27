@@ -7,7 +7,7 @@ import { Text, TextProps } from "./Text";
 
 const sheetStyles = tv({
   slots: {
-    root: "flex-1 bg-background py-4",
+    root: "bg-background py-4",
     header: "flex-row items-center border-b border-border px-4 pb-4",
     title: "text-lg font-semibold",
     actionText: "font-medium",
