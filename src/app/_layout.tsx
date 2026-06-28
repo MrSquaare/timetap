@@ -1,9 +1,7 @@
 import "../global.css";
 
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { PropsWithChildren, useEffect, useMemo } from "react";
@@ -23,25 +21,20 @@ SplashScreen.preventAutoHideAsync();
 
 const useLoader = () => {
   const migrationResult = useMigrations(database, migrations);
-  const fontResult = useFonts(Ionicons.font);
 
   const loaded = useMemo(() => {
     const migrationLoaded = migrationResult.success || !!migrationResult.error;
-    const fontLoaded = fontResult[0] || !!fontResult[1];
 
-    return migrationLoaded && fontLoaded;
-  }, [migrationResult, fontResult]);
+    return migrationLoaded;
+  }, [migrationResult]);
 
   const error = useMemo(() => {
     const migrationError = migrationResult.error
       ? new Error(`Migration Error: ${migrationResult.error.message}`)
       : null;
-    const fontError = fontResult[1]
-      ? new Error(`Font Error: ${fontResult[1].message}`)
-      : null;
 
-    return migrationError || fontError;
-  }, [migrationResult, fontResult]);
+    return migrationError;
+  }, [migrationResult]);
 
   return { loaded, error };
 };

@@ -24,7 +24,7 @@ const CategoriesDetailsHeaderActions: FC<{
           hitSlop={8}
           variant={"action"}
         >
-          <Icon name={"pencil-outline"} size={24} />
+          <Icon name={"edit"} size={24} />
         </Button>
       </Link>
       <Link asChild href={`/categories/${categoryId}/delete`}>
@@ -33,7 +33,7 @@ const CategoriesDetailsHeaderActions: FC<{
           hitSlop={8}
           variant={"action"}
         >
-          <Icon name={"trash-outline"} size={24} />
+          <Icon name={"trash"} size={24} />
         </Button>
       </Link>
     </View>
@@ -114,7 +114,7 @@ export default function CategoryDetails() {
       {eventsQuery.data?.length ? (
         <Link asChild href={`/categories/${categoryId}/events/create`}>
           <FAB accessibilityLabel={"Add Event"}>
-            <Icon name={"add"} size={24} />
+            <Icon name={"plus"} size={24} />
           </FAB>
         </Link>
       ) : null}

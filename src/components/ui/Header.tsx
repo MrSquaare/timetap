@@ -85,7 +85,7 @@ export const Header: FC<NativeStackHeaderProps> = ({
         onPress={() => navigation.goBack()}
         variant={"action"}
       >
-        <Icon color={color} name={"arrow-back"} size={24} />
+        <Icon color={color} name={"arrow-left"} size={24} />
         {options.headerBackTitle ? (
           <Text
             className={styles.backButtonText()}
