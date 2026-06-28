@@ -19,7 +19,7 @@ const HomeHeaderActions: FC = () => {
     <View>
       <Link asChild href={"settings"}>
         <Button accessibilityLabel={"Settings"} hitSlop={8} variant={"action"}>
-          <Icon name={"settings-outline"} size={24} />
+          <Icon name={"settings"} size={24} />
         </Button>
       </Link>
     </View>
@@ -98,7 +98,7 @@ export default function Home() {
       {query.data?.length ? (
         <Link asChild href={"categories/create"}>
           <FAB accessibilityLabel={"Create Category"}>
-            <Icon name={"add"} size={24} />
+            <Icon name={"plus"} size={24} />
           </FAB>
         </Link>
       ) : null}

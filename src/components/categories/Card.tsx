@@ -56,7 +56,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({
           onPress={() => onQuickAdd()}
           variant={"action"}
         >
-          <Icon name={"add-circle-outline"} size={22} />
+          <Icon name={"circle-plus"} size={22} />
         </Button>
       ) : null}
     </View>
