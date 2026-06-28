@@ -2,7 +2,7 @@ import "../global.css";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { SplashScreen } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { PropsWithChildren, useEffect, useMemo } from "react";
 import { View } from "react-native";
@@ -59,30 +59,6 @@ function AppWrapper({ children }: PropsWithChildren) {
   );
 }
 
-function AppLoader() {
-  const { loaded, error } = useLoader();
-
-  useEffect(() => {
-    if (loaded) {
-      if (error) {
-        console.error("App loading error:", error);
-      }
-
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
-
-  if (error) {
-    return <AppError error={error} />;
-  }
-
-  if (loaded) {
-    return <AppContent />;
-  }
-
-  return null;
-}
-
 function AppError({ error }: { error: Error }) {
   return (
     <View className={"flex-1 items-center justify-center bg-background p-4"}>
@@ -96,12 +72,28 @@ function AppContent() {
 }
 
 export default function App() {
+  const { loaded, error } = useLoader();
+
+  useEffect(() => {
+    if (loaded) {
+      if (error) {
+        console.error("App loading error:", error);
+      }
+
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <>
       <StatusBar />
       <AppWrapper>
         <View className={"flex-1 bg-background p-safe"}>
-          <AppLoader />
+          {error ? <AppError error={error} /> : <AppContent />}
         </View>
         <PortalHost />
       </AppWrapper>
