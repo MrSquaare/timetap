@@ -1,10 +1,16 @@
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import expo from "eslint-config-expo/flat.js";
-import prettier from "eslint-plugin-prettier/recommended";
 
 export default defineConfig(
+  globalIgnores([
+    ".expo/",
+    "dist/",
+    "drizzle/",
+    "android/",
+    "ios/",
+    "src/uniwind-types.d.ts",
+  ]),
   expo,
-  prettier,
   {
     rules: {
       "import/order": [
@@ -18,5 +24,4 @@ export default defineConfig(
       "react/jsx-sort-props": ["error"],
     },
   },
-  { ignores: [".expo/", "dist/", "drizzle", "src/uniwind-types.d.ts"] },
 );
