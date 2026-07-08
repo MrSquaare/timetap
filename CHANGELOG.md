@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.0](https://github.com/MrSquaare/timetap/compare/v0.1.0...73ea2ebcdc7fe8ed70847b815886794d1af67c8a) (2026-07-08)
+## [0.1.0](https://github.com/MrSquaare/timetap/compare/73ea2ebcdc7fe8ed70847b815886794d1af67c8a...v0.1.0) (2026-07-08)
 
 ### Features
 
