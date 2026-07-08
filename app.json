@@ -3,11 +3,14 @@
     "name": "TimeTap",
     "slug": "timetap",
     "scheme": "timetap",
-    "version": "0.0.0",
+    "version": "0.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "platforms": ["android", "ios"],
+    "platforms": [
+      "android",
+      "ios"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "fr.mrsquaare.timetap"
