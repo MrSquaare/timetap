@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,22 +15,30 @@ concurrency:
 jobs:
   checks:
     runs-on: ubuntu-latest
+    name: Checks
+
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Setup environment
         uses: ./.github/actions/setup-env
 
-      - name: Lint
-        run: pnpm lint
+      - name: Check
+        run: pnpm check
 
       - name: Type Check
-        run: pnpm type-check
+        run: pnpm typecheck
 
   android-build:
     runs-on: ubuntu-latest
+    name: Android Build
+
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Setup environment
         uses: ./.github/actions/setup-env
@@ -38,13 +49,13 @@ jobs:
       - name: Get fingerprint
         id: fingerprint
         run: |
-          echo "hash=$(pnpm dlx @expo/fingerprint fingerprint:generate --platform android | jq -r '.hash')" >> $GITHUB_OUTPUT
+          echo "hash=$(pnpm dlx @expo/fingerprint@0.20.1 fingerprint:generate --platform android | jq -r '.hash')" >> $GITHUB_OUTPUT
 
       - name: Generate prebuild
         run: pnpm expo prebuild --platform android --no-install
 
       - name: Cache Gradle
-        uses: actions/cache@v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: gradle
         with:
           path: |
@@ -56,7 +67,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Cache Build
-        uses: actions/cache@v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: build
         with:
           path: |
@@ -72,8 +83,12 @@ jobs:
 
   ios-build:
     runs-on: macos-26
+    name: iOS Build
+
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Setup environment
         uses: ./.github/actions/setup-env
@@ -82,18 +97,18 @@ jobs:
         run: pnpm expo export --platform ios
 
       - name: Set Xcode version
-        run: sudo xcode-select --switch "/Applications/Xcode_26.3.app/Contents/Developer"
+        run: sudo xcode-select --switch "/Applications/Xcode_26.6.app/Contents/Developer"
 
       - name: Get fingerprint
         id: fingerprint
         run: |
-          echo "hash=$(pnpm dlx @expo/fingerprint fingerprint:generate --platform ios | jq -r '.hash')" >> $GITHUB_OUTPUT
+          echo "hash=$(pnpm dlx @expo/fingerprint@0.20.1 fingerprint:generate --platform ios | jq -r '.hash')" >> $GITHUB_OUTPUT
 
       - name: Generate prebuild
         run: pnpm expo prebuild --platform ios --no-install
 
       - name: CocoaPods Cache
-        uses: actions/cache@v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: pods
         with:
           path: ios/Pods
@@ -106,7 +121,7 @@ jobs:
         run: pod install
 
       - name: Cache Xcode derived data
-        uses: actions/cache@v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: xcode-derived-data
         with:
           path: ios/build
