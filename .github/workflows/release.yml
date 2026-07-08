@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Existing tag to build (skips release-please)"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,6 +20,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     name: Release
+    if: github.event_name == 'push'
     permissions:
       contents: write
       issues: write
@@ -31,43 +38,52 @@ jobs:
         id: release
 
   android-build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     name: Android Build & Submit
     needs: release
-    if: ${{ needs.release.outputs.release_created == 'true' }}
+    if: |
+      always() &&
+      (needs.release.outputs.release_created == 'true' || github.event.inputs.tag_name != '')
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          ref: ${{ github.event.inputs.tag_name || needs.release.outputs.tag_name }}
           persist-credentials: false
 
       - name: Setup environment
         uses: ./.github/actions/setup-env
 
-      - name: Setup EAS
-        uses: expo/expo-github-action@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
-        with:
-          eas-version: latest
-          packager: pnpm
-          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Patch system watchers for ENOSPC
+        run: |
+          sudo sysctl fs.inotify.max_user_instances=524288
+          sudo sysctl fs.inotify.max_user_watches=524288
+          sudo sysctl fs.inotify.max_queued_events=524288
 
       - name: Build
-        run: eas build --platform android --profile production --local --output ./app-build --non-interactive
+        run: pnpm exec eas build --platform android --profile production --local --output ./app-build --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: Submit
-        run: eas submit --platform android --profile production --path ./app-build --non-interactive
+        run: pnpm exec eas submit --platform android --profile production --path ./app-build --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
   ios-build:
     runs-on: macos-26
     name: iOS Build & Upload
     needs: release
     # Disabled because we do not have an Apple Developer account to sign iOS binaries.
-    # if: ${{ needs.release.outputs.release_created == 'true' }}
+    # if: |
+    #   always() &&
+    #   (needs.release.outputs.release_created == 'true' || github.event.inputs.tag_name != '')
     if: false
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          ref: ${{ github.event.inputs.tag_name || needs.release.outputs.tag_name }}
           persist-credentials: false
 
       - name: Setup environment
@@ -76,15 +92,12 @@ jobs:
       - name: Set Xcode version
         run: sudo xcode-select --switch "/Applications/Xcode_26.6.app/Contents/Developer"
 
-      - name: Setup EAS
-        uses: expo/expo-github-action@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
-        with:
-          eas-version: latest
-          packager: pnpm
-          token: ${{ secrets.EXPO_TOKEN }}
-
       - name: Build
-        run: eas build --platform ios --profile production --local --non-interactive --output ./app-build
+        run: pnpm exec eas build --platform ios --profile production --local --non-interactive --output ./app-build
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: Upload
-        run: eas upload --platform ios --build-path ./app-build --non-interactive
+        run: pnpm exec eas upload --platform ios --build-path ./app-build --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
