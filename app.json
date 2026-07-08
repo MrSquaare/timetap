@@ -36,6 +36,13 @@
     ],
     "experiments": {
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "183f4159-e680-4a12-9d28-a4b23166ba0c"
+      }
+    },
+    "owner": "mrsquaare"
   }
 }
