@@ -1,12 +1,40 @@
 {
-  "name": "Debian",
-  "image": "mcr.microsoft.com/devcontainers/base:trixie",
-  "features": {
-    "ghcr.io/devcontainers/features/node:2": {
-      "nodeGypDependencies": true,
-      "version": "lts",
-      "pnpmVersion": "latest",
-      "nvmVersion": "latest"
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+  "name": "timetap",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:5.2.6-24-trixie",
+  "remoteUser": "node",
+  "containerEnv": {
+    "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0",
+    "pnpm_config_store_dir": "/home/node/.local/share/pnpm/store"
+  },
+  "mounts": [
+    {
+      "source": "timetap-pnpm-store",
+      "target": "/home/node/.local/share/pnpm/store",
+      "type": "volume"
+    },
+    {
+      "source": "timetap-expo",
+      "target": "/home/node/.expo",
+      "type": "volume"
+    }
+  ],
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "forwardPorts": [8081],
+  "portsAttributes": {
+    "8081": {
+      "label": "Expo (Metro)",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "expo.vscode-expo-tools"
+      ]
     }
   }
 }
