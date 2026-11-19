@@ -49,7 +49,6 @@ const pickerStyles = tv({
       vertical: {
         root: "flex-row gap-x-3",
         list: "flex-col gap-y-1",
-        content: "flex-1",
       },
     },
     active: {
