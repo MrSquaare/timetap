@@ -20,7 +20,12 @@ import { useThemeStore } from "../stores/theme";
 SplashScreen.preventAutoHideAsync();
 
 const useLoader = () => {
-  const migrationResult = useMigrations(database, migrations);
+  // Workaround: drizzle-orm@1.0.0-rc.5 expo-sqlite/migrator.d.ts still types `useMigrations`
+  // with a v0 `journal` field, while runtime `readMigrationFiles` only reads `{ migrations }`.
+  const migrationResult = useMigrations(
+    database,
+    migrations as unknown as Parameters<typeof useMigrations>[1],
+  );
 
   const loaded = useMemo(() => {
     const migrationLoaded = migrationResult.success || !!migrationResult.error;
